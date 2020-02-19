@@ -8,11 +8,10 @@ httpServer.use(bodyParser.json());
 httpServer.use(bodyParser.urlencoded({     // to support URL-encoded bodies            
 	extended: true
 }));    
-httpServer.use(express.static(__dirname));
 
-httpServer.set('views', __dirname +'views');
-httpServer.set('view engine', 'ejs');
-httpServer.engine('html', require('ejs').renderFile);
+httpServer.set('views', path.join(__dirname,'views'))
+httpServer.set('view engine', 'ejs')
+httpServer.engine('html', require('ejs').renderFile)
 httpServer.use(express.static(path.join(__dirname, 'public')))
 
 httpServer.listen(PORT, function() {

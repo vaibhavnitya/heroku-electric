@@ -16,7 +16,7 @@ httpServer.engine('html', require('ejs').renderFile);
 httpServer.use(express.static(path.join(__dirname, 'public')))
 
 httpServer.listen(PORT, function() {
-    log('HTTP server listening at port', PORT);
+  console.log('HTTP server listening at port', PORT);
 });
 
 httpServer.get('/', function(req,res){

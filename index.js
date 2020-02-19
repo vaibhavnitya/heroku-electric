@@ -2,6 +2,10 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
+express.get('/getdata', (req, res) => {
+  res.send('hello man is there')
+})
+
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))

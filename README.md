@@ -40,6 +40,7 @@ For more information about using Node.js on Heroku, see these Dev Center article
 
 ## How to start
 
+- Install heroku CLI
 - heroku login
 - Git repo: https://github.com/vaibhavnitya/heroku-electric.git
 - To push to server: git push heroku master

@@ -45,4 +45,4 @@ For more information about using Node.js on Heroku, see these Dev Center article
 - Git repo: https://github.com/vaibhavnitya/heroku-electric.git
 - To push to server: git push heroku master
 - Run locally: heroku local web
-- Remote server git : https://git.heroku.com/hidden-lowlands-07641.git
+- Remote server git : https://git.heroku.com/heroku-electric.git

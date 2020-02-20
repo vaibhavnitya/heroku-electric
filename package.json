@@ -1,7 +1,8 @@
 {
-  "name": "node-js-getting-started",
+  "name": "heroku-electric",
   "version": "0.3.0",
   "description": "A sample Node.js app using Express 4",
+  "author": "Vaibhav Naik<vaibhavnitya@gmail.com>",
   "engines": {
     "node": "12.x"
   },
@@ -13,7 +14,8 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "ejs": "^2.5.6",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "request": "^2.81.0",
@@ -21,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/vaibhavnitya/heroku-electric.git"
   },
   "keywords": [
     "node",

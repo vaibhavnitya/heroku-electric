@@ -32,6 +32,7 @@ router.post('/', function(req,res) {
 	}
 
   data.id = usageDataArray.length + 1
+  data.date = Date.now()
   usageDataArray.push(data)
 
   res.send({

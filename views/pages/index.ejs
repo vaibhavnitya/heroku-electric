@@ -22,6 +22,7 @@
         <table>
           <thead>
             <tr>
+              <th>Date</th>
               <th>User ID</th>
               <th>Voltage</th>
               <th>Current</th>
@@ -43,7 +44,9 @@
         url: '/api/usage',
         success: function(usageList) {
           const html = usageList.map(usage => {
+            const date = new Date(usage.date)
             return `<tr>
+              <td>${date.toLocaleString()}</td>
               <td>${usage.userId}</td>
               <td>${usage.voltage}</td>
               <td>${usage.current}</td>

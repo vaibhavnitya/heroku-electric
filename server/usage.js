@@ -1,22 +1,53 @@
 var express = require('express')
 var router = express.Router()
+var fs = require('fs');
 
+const usageFile = 'usage.txt'
 var usageDataArray = []
 
+const readUsageData = (next) => {
+  fs.readFile(usageFile, 'utf-8', (err, fileData) => {
+    if (err) {
+      next(null)
+    } else {
+      const usageDataArray = fileData.split(';').map(usage => usage ? JSON.parse(usage) : null)
+      !usageDataArray[usageDataArray.length - 1] ? usageDataArray.pop() : null
+      next(usageDataArray)
+    }    
+  })
+}
+
 router.get('/', function (req, res) {
-  res.send(usageDataArray)
+  readUsageData((usageData) => {
+    if (usageData) {
+      res.send(usageData)
+    } else {
+      res.send({
+        message: 'Failed to get usage data'
+      })
+    }
+  })
 })
 
 router.get('/:userId', function (req, res) {
   if (req.params.userId) {
-    data = usageDataArray.filter(({userId}) => (userId == req.params.userId))
-    if (data.length) {
-      res.send(data)
-    }
+    readUsageData((usageData) => {
+      if (usageData) {
+        data = usageData.filter(({userId}) => (userId == req.params.userId))
+        if (data.length) {
+          res.send(data)
+        }
+      } else {
+        res.send({
+          message: 'Failed to get usage data'
+        })
+      }
+    })
+  } else {
+    res.send({
+      message: 'User ID is incorrect'
+    })
   }
-  res.send({
-    message: 'User ID is incorrect'
-  })
 })
 
 router.post('/', function(req,res) {
@@ -34,10 +65,18 @@ router.post('/', function(req,res) {
   data.id = usageDataArray.length + 1
   data.date = Date.now()
   usageDataArray.push(data)
-
-  res.send({
-    message: 'Data updated successfully',
-    data
+  
+  fs.appendFile(usageFile, `${JSON.stringify(data)};`, (err) => {
+    if (err) {
+      res.send({
+        message: 'Failed to update data'
+      })
+    } else {
+      res.send({
+        message: 'Data updated successfully',
+        data
+      })
+    }
   })
 })
 

@@ -16,7 +16,7 @@
     </div>
     <div class="container">
       <div class="alert alert-info text-center" role="alert">
-        <span  class="alert-link">Power utilization for the users</span>
+        <span  class="alert-link">Power utilization for the user: <%= userId %></span>
       </div>
       <hr>
       <div class="row">
@@ -24,7 +24,6 @@
           <thead>
             <tr>
               <th>Date</th>
-              <th>User ID</th>
               <th>Voltage</th>
               <th>Current</th>
               <th>Power</th>
@@ -39,28 +38,26 @@
       </div>
   </body>
   <script>
-    $(document).ready(function () {
+		$(document).ready(function () {
+			const userId = <%- userId %>
       $.ajax({
         type: 'GET',
-        url: '/api/usage',
+        url: `/api/usage/${userId}`,
         success: function(usageList) {
-          if (Array.isArray(usageList)) {
-            const html = usageList.map(usage => {
-              if (usage) {
-                const date = new Date(usage.date)
-                return `<tr>
-                  <td>${date.toLocaleString()}</td>
-                  <td><a href="/usage/${usage.userId}">${usage.userId || '-'}</a></td>
-                  <td>${usage.voltage || '-'}</td>
-                  <td>${usage.current || '-'}</td>
-                  <td>${usage.power || '-'}</td>
-                  <td>${usage.frequency || '-'}</td>
-                  <td>${usage.energy || '-'}</td>
-                </tr>`
-              }
-            })
-            $('#usageTableBody').html(html)
-          }
+					if (Array.isArray(usageList)) {
+						const html = usageList.map(usage => {
+							const date = new Date(usage.date)
+							return `<tr>
+								<td>${date.toLocaleString()}</td>
+								<td>${usage.voltage || '-'}</td>
+								<td>${usage.current || '-'}</td>
+								<td>${usage.power || '-'}</td>
+								<td>${usage.frequency || '-'}</td>
+								<td>${usage.energy || '-'}</td>
+							</tr>`
+						})
+						$('#usageTableBody').html(html)
+					}
         }
       });
     });

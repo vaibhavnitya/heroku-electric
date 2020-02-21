@@ -23,5 +23,5 @@ httpServer.listen(PORT, function() {
 httpServer.use('/api', server)
 
 httpServer.get('/', function(req,res){
-  res.render('pages/index')
+  res.render('pages/index', {usageList: []})
 })

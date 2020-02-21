@@ -47,12 +47,12 @@
             const date = new Date(usage.date)
             return `<tr>
               <td>${date.toLocaleString()}</td>
-              <td>${usage.userId}</td>
-              <td>${usage.voltage}</td>
-              <td>${usage.current}</td>
-              <td>${usage.power}</td>
-              <td>${usage.frequency}</td>
-              <td>${usage.energy}</td>
+              <td>${usage.userId || '-'}</td>
+              <td>${usage.voltage || '-'}</td>
+              <td>${usage.current || '-'}</td>
+              <td>${usage.power || '-'}</td>
+              <td>${usage.frequency || '-'}</td>
+              <td>${usage.energy || '-'}</td>
             </tr>`
           })
           $('#usageTableBody').html(html);

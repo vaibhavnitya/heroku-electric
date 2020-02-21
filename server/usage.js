@@ -24,11 +24,11 @@ router.post('/', function(req,res) {
 
 	const data = {
     'userId': usageData.userId || 1,
-		'voltage': usageData.voltage,
-		'current': usageData.current,
-		'power': usageData.power,
-		'frequency': usageData.frequency,
-    'energy': usageData.energy,
+		'voltage': usageData.voltage || '',
+		'current': usageData.current || '',
+		'power': usageData.power || '',
+		'frequency': usageData.frequency || '',
+    'energy': usageData.energy || '',
 	}
 
   data.id = usageDataArray.length + 1

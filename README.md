@@ -46,3 +46,17 @@ For more information about using Node.js on Heroku, see these Dev Center article
 - To push to server: git push heroku master
 - Run locally: heroku local web
 - Remote server git : https://git.heroku.com/heroku-electric.git
+
+## How to run heroku electric app
+Pre-requisites:
+1. NodeJS installed: >10.x
+2. npm installed
+3. git installed
+4. heroku CLI installed
+- git clone https://github.com/vaibhavnitya/heroku-electric.git
+- cd heroku-electric
+- npm install
+To run locally
+- heroku local web
+To run on heroku server
+- set the remote heroku master: git remote add heroku <your heroku app git URL>

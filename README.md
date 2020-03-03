@@ -53,10 +53,18 @@ Pre-requisites:
 2. npm installed
 3. git installed
 4. heroku CLI installed
-- git clone https://github.com/vaibhavnitya/heroku-electric.git
-- cd heroku-electric
-- npm install
+```
+$ git clone https://github.com/vaibhavnitya/heroku-electric.git
+$ cd heroku-electric
+$ npm install
+```
 #### To run locally
-- heroku local web
+```
+$ heroku local web
+```
 #### To run on heroku server
-- set the remote heroku master: git remote add heroku <your heroku app git URL>
+- set the remote heroku master:
+```
+$ git remote add heroku [your heroku app git URL]
+$ git push heroku master
+```

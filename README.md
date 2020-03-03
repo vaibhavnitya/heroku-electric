@@ -56,7 +56,7 @@ Pre-requisites:
 - git clone https://github.com/vaibhavnitya/heroku-electric.git
 - cd heroku-electric
 - npm install
-To run locally
+#### To run locally
 - heroku local web
-To run on heroku server
+#### To run on heroku server
 - set the remote heroku master: git remote add heroku <your heroku app git URL>

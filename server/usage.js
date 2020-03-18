@@ -22,9 +22,7 @@ router.get('/', function (req, res) {
     if (usageData) {
       res.send(usageData)
     } else {
-      res.send({
-        message: 'Failed to get usage data'
-      })
+      res.send([])
     }
   })
 })
@@ -38,15 +36,11 @@ router.get('/:userId', function (req, res) {
           res.send(data)
         }
       } else {
-        res.send({
-          message: 'Failed to get usage data'
-        })
+        res.send([])
       }
     })
   } else {
-    res.send({
-      message: 'User ID is incorrect'
-    })
+    res.send([])
   }
 })
 

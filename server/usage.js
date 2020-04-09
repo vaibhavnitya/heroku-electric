@@ -1,44 +1,28 @@
 var express = require('express')
 var router = express.Router()
-var fs = require('fs');
-
-const usageFile = 'usage.txt'
-var usageDataArray = []
-
-const readUsageData = (next) => {
-  fs.readFile(usageFile, 'utf-8', (err, fileData) => {
-    if (err) {
-      next(null)
-    } else {
-      const usageDataArray = fileData.split(';').map(usage => usage ? JSON.parse(usage) : null)
-      !usageDataArray[usageDataArray.length - 1] ? usageDataArray.pop() : null
-      next(usageDataArray)
-    }    
-  })
-}
+const BlockchainModule = require('../../fabric-samples')
 
 router.get('/', function (req, res) {
-  readUsageData((usageData) => {
-    if (usageData) {
-      res.send(usageData)
+  BlockchainModule.usageModule.getAllUsage()
+  .then(response => {
+    if (response.code > 0) {
+      res.send(response.usages)
     } else {
       res.send([])
     }
-  })
+  }) 
 })
 
 router.get('/:userId', function (req, res) {
   if (req.params.userId) {
-    readUsageData((usageData) => {
-      if (usageData) {
-        data = usageData.filter(({userId}) => (userId == req.params.userId))
-        if (data.length) {
-          res.send(data)
-        }
+    BlockchainModule.usageModule.getUsageForUser(req.params.userId)
+    .then(response => {
+      if (response.code > 0) {
+        res.send(response.usages)
       } else {
         res.send([])
       }
-    })
+    }) 
   } else {
     res.send([])
   }
@@ -54,24 +38,37 @@ router.post('/', function(req,res) {
 		'power': usageData.power || '',
 		'frequency': usageData.frequency || '',
     'energy': usageData.energy || '',
-	}
-
-  data.id = usageDataArray.length + 1
-  data.date = Date.now()
-  usageDataArray.push(data)
+  }
+  data.time = (new Date()).getTime()
   
-  fs.appendFile(usageFile, `${JSON.stringify(data)};`, (err) => {
-    if (err) {
+  if (data.userId) {
+    BlockchainModule.userModule.getUser(data.userId)
+    .then(response => {
+      if (response.code > 0) {
+        BlockchainModule.usageModule.createUsage(data)
+        .then(createResponse => {
+          if (createResponse.code > 0) {
+            res.send({
+              message: 'Data updated successfully',
+              data
+            })
+          } else {
+            res.send({
+              message: 'Failed to update data'
+            })
+          }
+        })
+      } else {
+        res.send({
+          message: 'Failed to update data. User not registered'
+        })
+      }
+    }).catch(error => {
       res.send({
-        message: 'Failed to update data'
+        message: 'Failed to update data. User not registered'
       })
-    } else {
-      res.send({
-        message: 'Data updated successfully',
-        data
-      })
-    }
-  })
+    })
+  }
 })
 
 module.exports = router

@@ -3,6 +3,7 @@ const router = express.Router()
 
 // Import modules
 const usage = require('./usage')
+const user  = require('./user') 
 
 // middleware that is specific to this router
 router.use(function timeLog (req, res, next) {
@@ -11,6 +12,7 @@ router.use(function timeLog (req, res, next) {
 })
 
 router.use('/usage', usage)
+router.use('/user', user)
 
 // define the default
 router.get('/', function (req, res) {

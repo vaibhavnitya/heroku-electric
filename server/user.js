@@ -13,6 +13,22 @@ router.get('/', function (req, res) {
   }) 
 })
 
+router.get('/checkUserRegistered', function (req, res) {
+  BlockchainModule.userModule.checkUserRegistered()
+  .then(response => {
+    res.send({
+      code: 1,
+      message: 'Admin registered'
+    })
+  })
+  .catch(error => {
+    res.send({
+      code: 0,
+      message: 'Admin not registered'
+    })
+  })
+})
+
 router.get('/:userId', function (req, res) {
   if (req.params.userId) {
     BlockchainModule.userModule.getUser(req.params.userId)

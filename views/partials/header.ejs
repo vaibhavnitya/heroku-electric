@@ -3,3 +3,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+<style>
+  .jumbotron {
+    padding: 10px;
+  }
+  table {
+    margin: auto;
+  }
+  .success {
+    color: green;
+  }
+  .error {
+    color: red;
+  }
+  .hide {
+    display: none;
+  }
+</style>
+<script>
+  function verifyLogin() {
+    const loggedTime = parseInt(window.localStorage.getItem('logged'))
+    if (!loggedTime || (((new Date).getTime() - loggedTime) > 86383184)) {
+      window.location.href = '/'
+    }
+  }
+</script>

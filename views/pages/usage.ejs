@@ -38,28 +38,37 @@
       </div>
   </body>
   <script>
+    function fetchUsagesData () {
+      const userId = window.location.pathname.split('/')[2]
+      if (userId) {
+        $.ajax({
+          type: 'GET',
+          url: `/api/usage/${userId}`,
+          success: function(usageList) {
+            if (Array.isArray(usageList)) {
+              const html = usageList.map(usageRecord => {
+                if (usageRecord) {
+                  const usage = usageRecord.Record
+                  const date = new Date(parseInt(usage.time))
+                  return `<tr>
+                    <td>${date.toLocaleString()}</td>
+                    <td>${usage.voltage || '-'}</td>
+                    <td>${usage.current || '-'}</td>
+                    <td>${usage.power || '-'}</td>
+                    <td>${usage.frequency || '-'}</td>
+                    <td>${usage.energy || '-'}</td>
+                  </tr>`
+                }
+              })
+              $('#usageTableBody').html(html)
+            }
+          }
+        })
+      }
+    }
 		$(document).ready(function () {
-			const userId = <%- userId %>
-      $.ajax({
-        type: 'GET',
-        url: `/api/usage/${userId}`,
-        success: function(usageList) {
-					if (Array.isArray(usageList)) {
-						const html = usageList.map(usage => {
-							const date = new Date(usage.date)
-							return `<tr>
-								<td>${date.toLocaleString()}</td>
-								<td>${usage.voltage || '-'}</td>
-								<td>${usage.current || '-'}</td>
-								<td>${usage.power || '-'}</td>
-								<td>${usage.frequency || '-'}</td>
-								<td>${usage.energy || '-'}</td>
-							</tr>`
-						})
-						$('#usageTableBody').html(html)
-					}
-        }
-      });
+			verifyLogin()
+      fetchUsagesData()
     });
   </script>
 </html>

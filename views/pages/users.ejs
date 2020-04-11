@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/header.ejs %>
+    <style>
+      tr { height: 25px; }
+      th, td { width: 100px; text-align: center; border: 1px solid; padding: 5px; }
+      tr>th:first-child, tr>td:first-child { width: 160px; }
+      .creationResponse {
+        margin-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="jumbotron text-center">
+      <div class="container">
+        <h2>Power Supply Management</h2>
+      </div>
+    </div>
+    <div class="container">
+      <div class="alert alert-info text-center" role="alert">
+        <span  class="alert-link">Users</span>
+      </div>
+      <div>
+        User Name : <input id="userName" />
+        <button onclick="createUser()">Create User</button>
+        <span class="creationResponse" id="creationResponse"></span>
+      </div>
+      <hr>
+      <div class="row">
+        <table>
+          <thead>
+            <tr>
+              <th>UserID</th>
+              <th>User Name</th>
+            </tr>
+          </thead>
+          <tbody id="usageTableBody">
+
+          </tbody>
+        </table>        
+      </div>
+  </body>
+  <script>
+    function fetchUsersData () {
+      $.ajax({
+        type: 'GET',
+        url: `/api/user/`,
+        success: function(userList) {
+					if (Array.isArray(userList)) {
+						const html = userList.map(user => {
+							const userData = user.Record
+							return `<tr>
+                <td><a href="/usage/${userData.userId}">${userData.userId || '-'}</a></td>
+								<td>${userData.userName || '-'}</td>
+							</tr>`
+						})
+						$('#usageTableBody').html(html)
+					}
+        }
+      });
+    }
+
+    function createUser () {
+      const userName = document.getElementById('userName').value
+      const responseElem = document.getElementById('creationResponse')
+      if (userName.length) {
+        responseElem.innerHTML = 'Creating user...'
+        $.ajax({
+          type: 'POST',
+          url: `/api/user/`,
+          data: {
+            userName
+          },
+          dataType: 'json',
+          success: function(response) {
+            document.getElementById('userName').value = ''
+            responseElem.innerHTML = `Successfully created user : ${userName}`
+            responseElem.className = 'creationResponse success'
+            setTimeout (() => {
+              fetchUsersData()
+              responseElem.innerHTML = ''
+            }, 5000)
+          },
+          error: function(error) {
+            responseElem.innerHTML = `Failed to create user : ${userName}`
+            responseElem.className = 'creationResponse error'
+          }
+        });
+      } else {
+        responseElem.innerHTML = `Failed to create User. User name should be provided`
+        responseElem.className = 'creationResponse error'
+        console.error('Provide user name')
+      }
+    }
+
+		$(document).ready(function () {
+      verifyLogin()
+      fetchUsersData()
+    });
+  </script>
+</html>

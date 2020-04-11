@@ -33,6 +33,14 @@ httpServer.get('/', function(req,res){
   res.render('pages/index')
 })
 
+httpServer.get('/users/', function(req,res){
+  res.render('pages/users')
+})
+
+httpServer.get('/usages/', function(req,res){
+  res.render('pages/usages')
+})
+
 httpServer.get('/usage/:id', function(req,res){
   res.render('pages/usage', { userId: req.params.id })
 })

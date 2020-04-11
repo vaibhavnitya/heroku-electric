@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/header.ejs %>
+    <style>
+      tr { height: 25px; }
+      th, td { width: 100px; text-align: center; border: 1px solid; padding: 5px; }
+      tr>th:first-child, tr>td:first-child { width: 160px; }
+    </style>
+  </head>
+  <body>
+    <div class="jumbotron text-center">
+      <div class="container">
+        <h2>Power Supply Management</h2>
+      </div>
+    </div>
+    <div class="container">
+      <div class="alert alert-info text-center" role="alert">
+        <span  class="alert-link">Power utilization for the users</span>
+      </div>
+      <hr>
+      <div class="row">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>User ID</th>
+              <th>Voltage</th>
+              <th>Current</th>
+              <th>Power</th>
+              <th>Frequency</th>
+              <th>Energy</th>
+            </tr>
+          </thead>
+          <tbody id="usageTableBody">
+
+          </tbody>
+        </table>        
+      </div>
+  </body>
+  <script>
+    function fetchUsagesData () {
+      $.ajax({
+        type: 'GET',
+        url: '/api/usage',
+        success: function(usageList) {
+          if (Array.isArray(usageList)) {
+            const html = usageList.map(usageRecord => {
+              if (usageRecord) {
+                const usage = usageRecord.Record
+                const date = new Date(parseInt(usage.time))
+                return `<tr>
+                  <td>${date.toLocaleString()}</td>
+                  <td><a href="/usage/${usage.userId}">${usage.userId || '-'}</a></td>
+                  <td>${usage.voltage || '-'}</td>
+                  <td>${usage.current || '-'}</td>
+                  <td>${usage.power || '-'}</td>
+                  <td>${usage.frequency || '-'}</td>
+                  <td>${usage.energy || '-'}</td>
+                </tr>`
+              }
+            })
+            $('#usageTableBody').html(html)
+          }
+        }
+      });
+    }
+
+    $(document).ready(function () {
+      verifyLogin()
+      fetchUsagesData()
+    });
+  </script>
+</html>

@@ -6,63 +6,95 @@
       tr { height: 25px; }
       th, td { width: 100px; text-align: center; border: 1px solid; padding: 5px; }
       tr>th:first-child, tr>td:first-child { width: 160px; }
+      .loginMessage {
+        margin-left: 20px;
+      }
+      .row div{
+        margin: 10px 0;
+      }
+      .row>div {
+        text-align: center;
+        margin: 0 auto;
+      }
     </style>
   </head>
   <body>
     <div class="jumbotron text-center">
       <div class="container">
-        <h1>Power Supply Management</h1>
+        <h2>Power Supply Management</h2>
       </div>
     </div>
     <div class="container">
       <div class="alert alert-info text-center" role="alert">
-        <span  class="alert-link">Power utilization for the users</span>
+        <span  class="alert-link">Admin login</span>
       </div>
       <hr>
       <div class="row">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>User ID</th>
-              <th>Voltage</th>
-              <th>Current</th>
-              <th>Power</th>
-              <th>Frequency</th>
-              <th>Energy</th>
-            </tr>
-          </thead>
-          <tbody id="usageTableBody">
-
-          </tbody>
-        </table>        
+        <div class="">
+          <div id="adminLoggedOut">
+            <input placeholder="Admin User" type="text" id="adminUser" />
+            <button onclick="login()">login</button>
+            <div id="loginError"></div>
+          </div>
+          <div id="adminLoggedIn">
+            <div>
+              <h4 class="success">Admin is already logged in.</h4>
+            </div>
+            <div>
+              <div><a href="/users">Go to Users</a></div>
+              <div><a href="/usages">Go to Usages</a></div>
+            </div>
+          </div>
+        </div>
       </div>
   </body>
   <script>
-    $(document).ready(function () {
-      $.ajax({
-        type: 'GET',
-        url: '/api/usage',
-        success: function(usageList) {
-          if (Array.isArray(usageList)) {
-            const html = usageList.map(usage => {
-              if (usage) {
-                const date = new Date(usage.date)
-                return `<tr>
-                  <td>${date.toLocaleString()}</td>
-                  <td><a href="/usage/${usage.userId}">${usage.userId || '-'}</a></td>
-                  <td>${usage.voltage || '-'}</td>
-                  <td>${usage.current || '-'}</td>
-                  <td>${usage.power || '-'}</td>
-                  <td>${usage.frequency || '-'}</td>
-                  <td>${usage.energy || '-'}</td>
-                </tr>`
-              }
-            })
-            $('#usageTableBody').html(html)
+    function login () {
+      const adminUser = document.getElementById('adminUser').value
+      const loginError = document.getElementById('loginError')
+      loginError.innerHTML = ''
+      loginError.className = ''
+      if (adminUser === 'admin') {
+        $.ajax({
+          type: 'GET',
+          url: '/api/user/checkUserRegistered',
+          success: function(response) {
+            if (response && response.code > 0) {
+              window.localStorage.setItem('logged', (new Date).getTime())
+              window.localStorage.setItem('adminUser', 'admin')
+              displayAction()
+            } else {
+              loginError.innerHTML = `Failed to login admin. Admin not registered`
+              loginError.className = 'error'
+            }
           }
-        }
-      });
+        })
+        return
+      }
+      loginError.innerHTML = `Failed to login admin.`
+      loginError.className = 'error'
+    }
+
+    function checkLogin () {
+      const loggedTime = parseInt(window.localStorage.getItem('logged'))
+      if (!loggedTime || (((new Date).getTime() - loggedTime) > 86383184)) {
+        return false
+      }
+      return true
+    }
+
+    function displayAction () {
+      if (checkLogin()) {
+        document.getElementById('adminLoggedOut').className = 'hide'
+        document.getElementById('adminLoggedIn').className = ''
+      } else {
+        document.getElementById('adminLoggedOut').className = ''
+        document.getElementById('adminLoggedIn').className = 'hide'
+      }
+    }
+
+    $(document).ready(function () {
+      displayAction()
     });
   </script>
 </html>

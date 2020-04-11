@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const BlockchainModule = require('../../fabric-samples')
+const BlockchainModule = require('../../sample-blockchain')
 
 router.get('/', function (req, res) {
   BlockchainModule.userModule.getAllUsers()

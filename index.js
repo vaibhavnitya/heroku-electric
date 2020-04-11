@@ -4,7 +4,7 @@ const httpServer = express()
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const server = require('./server')
-const BlockchainModule = require('../fabric-samples')
+const BlockchainModule = require('../sample-blockchain')
 
 httpServer.use(bodyParser.json())                                 
 httpServer.use(bodyParser.urlencoded({     // to support URL-encoded bodies            

@@ -4,7 +4,13 @@ const httpServer = express()
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const server = require('./server')
-const BlockchainModule = require('../sample-blockchain')
+let BlockchainModule = null
+try {
+  BlockchainModule = require('../sample-blockchain')
+} catch(err) {
+  console.log('Missing dependency! This application is dependent on another repository.')
+  console.log('To proceed further, clone "https://github.com/vaibhavnitya/sample-blockchain" repository in the parent directory.')
+}
 
 httpServer.use(bodyParser.json())                                 
 httpServer.use(bodyParser.urlencoded({     // to support URL-encoded bodies            
